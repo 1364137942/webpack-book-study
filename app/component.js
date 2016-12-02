@@ -4,7 +4,7 @@
 module.exports = function () {
     var element = document.createElement('h1');
 
-    element.innerHTML = 'Hello world!';
+    element.innerHTML = 'Hello world!1231245611111111111666666';
 
     return element;
 };

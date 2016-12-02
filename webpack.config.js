@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const merge = require('webpack-merge');
 const validate = require('webpack-validator');
-const devServerConfig = require("./lib/devServer");
+const parts = require("./lib/parts");
 
 const PATHS = {
     app: path.join(__dirname, 'app'),
@@ -36,12 +36,22 @@ var config;
 //探测npm是如何运行的
 switch(process.env.npm_lifecycle_event) {
     case 'build':
-        config = merge(common, {});
+        config = merge(
+            common,
+            parts.setupCSS(PATHS.app),
+            {
+                devtool: 'source-map'
+            }
+            );
         break;
     default:
         config = merge(
             common,
-            devServerConfig.devServer({
+            parts.setupCSS(PATHS.app),
+            {
+                devtool: 'eval-source-map'
+            },
+            parts.devServer({
                 host: process.env.HOST,
                 port: process.env.PORT
             })
