@@ -10,7 +10,8 @@ const parts = require("./lib/parts");
 
 const PATHS = {
     app: path.join(__dirname, 'app'),
-    build: path.join(__dirname, 'build')
+    build: path.join(__dirname, 'build'),
+    style: path.join(__dirname, 'app', 'main.css')
 };
 
 const common =  {
@@ -18,6 +19,7 @@ const common =  {
     // We'll be using the latter form given it's
     // convenient with more complex configurations.
     entry: {
+        style: PATHS.style,
         app: PATHS.app
     },
     output: {
@@ -47,7 +49,7 @@ switch(process.env.npm_lifecycle_event) {
                 entries: ['react']
             }),
             parts.minify(),
-            parts.setupCSS(PATHS.app),
+            parts.extractCSS(PATHS.style),
             {
                 devtool: 'source-map',
                 output: {
@@ -64,7 +66,7 @@ switch(process.env.npm_lifecycle_event) {
     default:
         config = merge(
             common,
-            parts.setupCSS(PATHS.app),
+            parts.setupCSS(PATHS.style),
             {
                 devtool: 'eval-source-map'
             },
