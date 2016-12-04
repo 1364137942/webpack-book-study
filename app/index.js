@@ -1,8 +1,8 @@
 /**
  * Created by 子健 on 2016-12-2.
  */
-var component = require('./component');
+var component = require("./component");
 
-require('react');
+require("react");
 
 document.body.appendChild(component());
