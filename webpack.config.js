@@ -67,6 +67,33 @@ switch(process.env.npm_lifecycle_event) {
             parts.clean(PATHS.build)
         );
         break;
+    case 'stats':
+        config = merge(
+            common,
+            parts.setFreeVariable(
+                'process.env.NODE_ENV',
+                'production'
+            ),
+            parts.extractBundle({
+                name: 'vendor',
+                entries: ['react']
+            }),
+            parts.minify(),
+            parts.extractCSS(PATHS.style),
+            parts.purifyCSS([PATHS.app]),   //需要在ExtractTextPlugin后面使用
+            {
+                devtool: 'source-map',
+                output: {
+                    path: PATHS.build,
+                    filename: '[name].[chunkhash].js',
+                    // This is used for require.ensure. The setup
+                    // will work without but this is useful to set.
+                    chunkFilename: '[chunkhash].js'
+                }
+            },
+            parts.clean(PATHS.build)
+        );
+        break;
     default:
         config = merge(
             common,
@@ -80,4 +107,8 @@ switch(process.env.npm_lifecycle_event) {
             })
         )
 }
-module.exports = validate(config);
+
+// Run validator in quiet mode to avoid output in stats
+module.exports = validate(config, {
+    quiet: true
+});
